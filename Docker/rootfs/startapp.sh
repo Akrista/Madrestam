@@ -1,0 +1,1 @@
+exec /akl/squashfs-root/zaap
