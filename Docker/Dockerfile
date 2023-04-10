@@ -9,21 +9,16 @@ ENV APP_NAME="MadreSteam" \
 
 # All this gets executed on /tmp
 RUN set -x && \
-    dir /config && \
     dpkg --add-architecture i386 && \
     echo "========== Updating ==========" && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends \
     sudo \
     xterm \
-    apt-utils \
-    ca-certificates \
-    curl
-
-RUN echo "========== Setup sudoers ==========" && \
-    echo "app    ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-RUN echo "========== Install Dependencies ==========" && \
+    curl && \
+    echo "========== Setup sudoers ==========" && \
+    echo "app    ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && \
+    echo "========== Install Dependencies ==========" && \
     apt-get install -y --no-install-recommends \
     make \
     gnupg \
@@ -50,18 +45,15 @@ RUN echo "========== Install Dependencies ==========" && \
     file \
     pulseaudio \
     pciutils \
-    wine \
-    zenity 
-
-RUN echo "========== Install Steam ==========" && \
+    zenity && \
+    echo "========== Install Steam ==========" && \
     mkdir -p /src && \
     cd /src && \
     curl -O http://repo.steampowered.com/steam/archive/precise/steam_latest.tar.gz && \
     tar xzvf steam_latest.tar.gz && \
     cd /src/steam-launcher && \
-    make install 
-
-RUN echo "========== Clean up ==========" && \
+    make install && \ 
+    echo "========== Clean up ==========" && \
     rm /var/lib/dpkg/statoverride && \
     apt-get remove -y make && \
     apt-get autoremove -y && \
