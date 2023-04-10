@@ -1,2 +1,2 @@
 #!/bin/bash
-docker run --rm -it --name madrestam --shm-size 256M --network=host --privileged -v steam:/steam madrestam
+docker run --rm -it --name madrestam-lindo -p 5880:5800 --shm-size 256M --privileged madrestam-lindo
