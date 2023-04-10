@@ -51,17 +51,17 @@ RUN echo "========== Install Dependencies ==========" && \
     pulseaudio \
     pciutils \
     wine \
-    zenity && \
+    zenity 
 
-    RUN echo "========== Install Steam ==========" && \
+RUN echo "========== Install Steam ==========" && \
     mkdir -p /src && \
     cd /src && \
     curl -O http://repo.steampowered.com/steam/archive/precise/steam_latest.tar.gz && \
     tar xzvf steam_latest.tar.gz && \
     cd /src/steam-launcher && \
-    make install && \
+    make install 
 
-    RUN echo "========== Clean up ==========" && \
+RUN echo "========== Clean up ==========" && \
     rm /var/lib/dpkg/statoverride && \
     apt-get remove -y make && \
     apt-get autoremove -y && \
