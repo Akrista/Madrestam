@@ -1,3 +1,2 @@
 #!/bin/bash
-cd ./Docker
-docker build -t akrista/madrestam-lindo .
+docker build -t akrista/madresteam ./Docker

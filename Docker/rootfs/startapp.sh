@@ -1,1 +1,5 @@
-exec Lindo --no-sandbox > /config/logs/output.log 2>&1 &
+#!/bin/bash
+
+export HOME=/steam
+export LD_LIBRARY_PATH="/steam/xdg/data/Steam/ubuntu12_32"
+exec steam > /config/logs/output.log 2>&1 &
