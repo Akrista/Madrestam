@@ -1,1 +1,1 @@
-exec /akl/squashfs-root/zaap
+exec Lindo --no-sandbox > /config/logs/output.log 2>&1 &

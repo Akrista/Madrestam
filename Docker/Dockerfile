@@ -1,22 +1,25 @@
-FROM jlesage/baseimage-gui:debian-11
+FROM jlesage/baseimage-gui:debian-11-v4.4
 
-ENV APP_NAME="Madrestam"
-# APPDIR is the directory where the Ankama Launcher is downloaded and extracted
-ENV APPDIR="/akl/squashfs-root/"
+ENV APP_NAME="Lindo"
+ENV DARK_MODE=1
 
 # All this gets executed on /tmp
-
 RUN set -x && \
+    dir /config && \
     dpkg --add-architecture i386 && \
+    echo "========== Updating ==========" && \
     apt-get update -y && \
     apt-get install -y --no-install-recommends \
     sudo \
     xterm \
     apt-utils \
-    curl && \
-    echo "========== Setup sudoers ==========" && \
-    echo "app    ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers && \
-    echo "========== Install Dependencies ==========" && \
+    ca-certificates \
+    curl
+
+RUN echo "========== Setup sudoers ==========" && \
+    echo "app    ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+RUN echo "========== Install Dependencies ==========" && \
     apt-get install -y --no-install-recommends \
     libnss3 \
     libatk-bridge2.0-0 \
@@ -24,48 +27,15 @@ RUN set -x && \
     libgtk-3-0 \
     libgbm1 \
     libasound2 \
-    libatk1.0-0 && \
-    # ==== We may not need this, this is only for steam ==== #
-    # gnupg \
-    # xz-utils \
-    # libc6-i386 \
-    # libgl1:i386 \
-    # libxtst6:i386 \
-    # libxrandr2:i386 \
-    # libglib2.0-0:i386 \
-    # libgtk2.0-0:i386 \
-    # libpulse0:i386 \
-    # libva2:i386 \
-    # libbz2-1.0:i386 \
-    # libvdpau1:i386 \
-    # libva-x11-2:i386 \
-    # libcurl4-gnutls-dev:i386 \
-    # libopenal1:i386 \
-    # libsm6:i386 \
-    # libice6:i386 \
-    # libasound2-plugins:i386 \
-    # libsdl2-image-2.0-0:i386 \
-    # wine \
-    # dbus \
-    # dbus-x11 \
-    # file \
-    # pulseaudio \
-    # pciutils \
-    # zenity && \
-    mkdir -p /akl && \
-    pwd && \
-    echo $APPDIR && \
-    curl -# -L -o /akl/Ankama_Launcher-Setup-x86_64.AppImage https://launcher.cdn.ankama.com/installers/production/Ankama%20Launcher-Setup-x86_64.AppImage && \
-    chmod +x /akl/Ankama_Launcher-Setup-x86_64.AppImage && \
-    cd /akl && \
-    /akl/Ankama_Launcher-Setup-x86_64.AppImage --appimage-extract && \
-    dir /akl && \
-    rm /akl/Ankama_Launcher-Setup-x86_64.AppImage && \
-    # cd /akl/squashfs-root && \
-    # dir /akl/squashfs-root && \
-    # sudo -u app /akl/squashfs-root/AppRun --install && \
-    # dir ~/.local/share/applications && \
-    echo "========== Clean up ==========" && \
+    libatk1.0-0
+
+RUN echo "========== Install Lindo Emulator ==========" && \
+    mkdir -p /lindo && \
+    curl -# -L -o /lindo/lindo-3.0.0-rc.12.tar.gz https://github.com/prixe/lindo/releases/download/v3.0.0-rc.12/lindo-3.0.0-rc.12.tar.gz && \
+    tar -xzf /lindo/lindo-3.0.0-rc.12.tar.gz -C /usr/local/bin --strip-components=1
+
+RUN echo "========== Clean up ==========" && \
+    rm -r /lindo && \
     rm /var/lib/dpkg/statoverride && \
     apt-get autoremove -y && \
     rm -rf /tmp/* && \
@@ -75,8 +45,8 @@ COPY rootfs/ /
 
 # Metadata.
 LABEL \
-    org.label-schema.name="madrestam" \
-    org.label-schema.description="Docker container for playing Ankama Games" \
+    org.label-schema.name="madrestam-lindo" \
+    org.label-schema.description="Docker container for playing Lindo Emulator" \
     org.label-schema.version="${DOCKER_IMAGE_VERSION:-unknown}" \
     org.label-schema.vcs-url="https://github.com/akrista/madrestam" \
     org.label-schema.schema-version="1.0"
